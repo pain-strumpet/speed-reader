@@ -1,0 +1,39 @@
+{
+  "name": "speed-reader-temp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "@vitejs/plugin-react": "^5.1.4",
+    "tailwindcss": "^4.2.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^1.2.0"
+  },
+  "main": "tailwind.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "autoprefixer": "^10.4.27",
+    "clsx": "^2.1.1",
+    "epubjs": "^0.3.93",
+    "framer-motion": "^12.35.2",
+    "idb-keyval": "^6.2.2",
+    "lucide-react": "^0.577.0",
+    "pdfjs-dist": "^5.5.207",
+    "postcss": "^8.5.8",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-dropzone": "^15.0.0",
+    "react-icons": "^5.6.0",
+    "tailwind-merge": "^3.5.0"
+  }
+}
