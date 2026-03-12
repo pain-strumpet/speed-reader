@@ -23,17 +23,28 @@ export const LibraryManager: React.FC = () => {
             let originalText = '';
             
             // File Type Routing - Mobile file pickers often send empty strings for file.type on .txt files
-            if (file.type === 'text/plain' || file.name.toLowerCase().endsWith('.md') || file.name.toLowerCase().endsWith('.txt')) {
+            const fileName = file.name.toLowerCase();
+            const fileType = file.type.toLowerCase();
+
+            if (fileType === 'text/plain' || fileName.endsWith('.md') || fileName.endsWith('.txt')) {
                 originalText = await file.text();
-            } else if (file.name.toLowerCase().endsWith('.epub') || file.type === 'application/epub+zip') {
+            } else if (fileName.endsWith('.epub') || fileType === 'application/epub+zip') {
                 originalText = await parseEpubFile(file);
-            } else if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-                originalText = await parsePdfFile(file);
+            } else if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
+                try {
+                    originalText = await parsePdfFile(file);
+                } catch (pdfErr) {
+                    console.error("PDF specific error", pdfErr);
+                    throw new Error(pdfErr instanceof Error ? pdfErr.message : "Failed to extract text from PDF.");
+                }
             } else {
-                throw new Error("Unsupported format");
+                throw new Error(`Unsupported format: ${file.type || 'unknown type'} (${file.name})`);
             }
 
             const parsedWords = parseText(originalText);
+            if (parsedWords.length === 0) {
+                throw new Error("The document appears to be empty or contains no readable text.");
+            }
 
             const newBook: BookRecord = {
                 id,
@@ -50,7 +61,8 @@ export const LibraryManager: React.FC = () => {
             
         } catch (err) {
             console.error("Failed to parse file", err);
-            alert("Failed to parse this file format.");
+            const message = err instanceof Error ? err.message : "Failed to parse this file format.";
+            alert(message);
         } finally {
             setIsParsing(false);
             if (fileInputRef.current) fileInputRef.current.value = ''; // Reset input so same file can be selected again if needed
